@@ -1,4 +1,5 @@
 import React from 'react';
+import Login from "./pages/Login";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -184,10 +185,12 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <AppRoutes />
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/student" element={<StudentDashboard />} />
+          <Route path="/faculty" element={<FacultyDashboard />} />
+        </Routes>
       </Router>
     </AuthProvider>
   );
 }
-
-export default App;

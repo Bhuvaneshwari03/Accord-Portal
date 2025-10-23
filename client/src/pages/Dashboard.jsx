@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { leaveAPI } from '../services/api';
 import { 
@@ -18,6 +19,7 @@ import toast from 'react-hot-toast';
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     total: 0,
     pending: 0,
@@ -26,6 +28,22 @@ const Dashboard = () => {
   });
   const [recentRequests, setRecentRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+
+    switch (user.role) {
+      case 'student':
+        navigate('/student');
+        break;
+      case 'faculty':
+      case 'admin':
+        navigate('/faculty');
+        break;
+      default:
+        navigate('/login');
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     fetchDashboardData();

@@ -1,15 +1,31 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 
 export const AuthContext = createContext();
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (token) {
-      const savedUser = JSON.parse(localStorage.getItem("user"));
-      setUser(savedUser);
+    try {
+      if (token) {
+        const savedUser = JSON.parse(localStorage.getItem("user"));
+        setUser(savedUser);
+      }
+    } catch (error) {
+      console.error("Error loading auth state:", error);
+      localStorage.clear();
+    } finally {
+      setLoading(false);
     }
   }, [token]);
 
@@ -27,7 +43,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

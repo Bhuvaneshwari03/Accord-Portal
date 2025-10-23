@@ -30,7 +30,12 @@ API.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
+export const loginUser = async (credentials) => {
+  return await axios.post('/auth/login', credentials);
+};
+export const registerUser = async (userData) => {
+  return await axios.post('/auth/register', userData);
+};
 // Auth API calls
 export const authAPI = {
   register: (data) => API.post('/auth/register', data),

@@ -17,6 +17,9 @@ const {
 } = require('../middleware/auth');
 
 const router = express.Router();
+const auth = require("../middleware/auth");
+router.get("/all", auth(["faculty","admin"]), getAllLeaves);
+router.post("/", auth(["student"]), createLeave);
 
 // Validation rules
 const createLeaveValidation = [

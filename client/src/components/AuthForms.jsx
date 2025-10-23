@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Eye, EyeOff, User, Mail, Lock, Building, GraduationCap } from 'lucide-react';
 
@@ -14,8 +15,23 @@ const AuthForms = () => {
     studentId: '',
   });
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState(''); // Add error state
 
-  const { login, register, isLoading } = useAuth();
+  const { login, register, isLoading, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get the redirect path from location state, or default to dashboard
+  const from = location.state?.from?.pathname || '/dashboard';
+
+  // Only redirect on mount or when authentication status changes
+  useEffect(() => {
+    if (isAuthenticated) {
+      console.log('User authenticated, redirecting...');
+      // Use the 'from' path if available, otherwise dashboard
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, navigate, from]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,12 +39,16 @@ const AuthForms = () => {
       ...prev,
       [name]: value
     }));
-    // Clear error when user starts typing
+    // Clear errors when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
         [name]: ''
       }));
+    }
+    // Clear submit error when user makes changes
+    if (submitError) {
+      setSubmitError('');
     }
   };
 
@@ -66,32 +86,40 @@ const AuthForms = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Clear previous submit error
+    setSubmitError('');
+    
     if (!validateForm()) return;
 
-    const submitData = isLogin 
-      ? { email: formData.email, password: formData.password }
-      : formData;
+    try {
+      const submitData = isLogin 
+        ? { email: formData.email, password: formData.password }
+        : formData;
 
-    const result = isLogin 
-      ? await login(submitData)
-      : await register(submitData);
+      const result = isLogin 
+        ? await login(submitData)
+        : await register(submitData);
 
-    if (result.success) {
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        password: '',
-        role: 'student',
-        department: '',
-        studentId: '',
-      });
+      if (result.success) {
+        // Don't navigate here - let the useEffect handle it
+        // when isAuthenticated updates
+        
+        // Only reset form if staying on the same page (which shouldn't happen)
+        // The navigation will unmount this component anyway
+      } else {
+        // Handle login/register failure
+        setSubmitError(result.error || 'An error occurred. Please try again.');
+      }
+    } catch (error) {
+      console.error('Submit error:', error);
+      setSubmitError('An unexpected error occurred. Please try again.');
     }
   };
 
   const toggleMode = () => {
     setIsLogin(!isLogin);
     setErrors({});
+    setSubmitError('');
     setFormData({
       name: '',
       email: '',
@@ -101,6 +129,18 @@ const AuthForms = () => {
       studentId: '',
     });
   };
+
+  // If already authenticated, show loading or return null
+  if (isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Redirecting...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
@@ -122,8 +162,17 @@ const AuthForms = () => {
             </p>
           </div>
 
+          {/* Error Message */}
+          {submitError && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+              {submitError}
+            </div>
+          )}
+
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* ... rest of your form fields remain the same ... */}
+            
             {!isLogin && (
               <>
                 {/* Name */}

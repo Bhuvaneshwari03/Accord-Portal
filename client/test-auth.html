@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input, select { width: 300px; padding: 8px; margin-bottom: 10px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 20px; padding: 10px; background: #f8f9fa; border: 1px solid #dee2e6; }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+    </style>
+</head>
+<body>
+    <h1>Authentication Test</h1>
+    
+    <div class="form-group">
+        <label>Test Type:</label>
+        <select id="testType">
+            <option value="register">Register</option>
+            <option value="login">Login</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Name:</label>
+        <input type="text" id="name" placeholder="Full Name">
+    </div>
+
+    <div class="form-group">
+        <label>Email:</label>
+        <input type="email" id="email" placeholder="Email">
+    </div>
+
+    <div class="form-group">
+        <label>Password:</label>
+        <input type="password" id="password" placeholder="Password">
+    </div>
+
+    <div class="form-group">
+        <label>Role:</label>
+        <select id="role">
+            <option value="student">Student</option>
+            <option value="faculty">Faculty</option>
+            <option value="admin">Admin</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Department:</label>
+        <input type="text" id="department" placeholder="Department">
+    </div>
+
+    <div class="form-group">
+        <label>Student ID (for students only):</label>
+        <input type="text" id="studentId" placeholder="Student ID">
+    </div>
+
+    <button onclick="testAuth()">Test Authentication</button>
+    
+    <div id="result"></div>
+
+    <script>
+        async function testAuth() {
+            const testType = document.getElementById('testType').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            const department = document.getElementById('department').value;
+            const studentId = document.getElementById('studentId').value;
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+
+            try {
+                let data;
+                if (testType === 'register') {
+                    data = {
+                        name,
+                        email,
+                        password,
+                        role,
+                        department,
+                        studentId: role === 'student' ? studentId : undefined
+                    };
+                } else {
+                    data = { email, password };
+                }
+
+                const response = await fetch('http://localhost:5000/api/auth/' + testType, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <h3>Success!</h3>
+                        <p><strong>Message:</strong> ${result.message}</p>
+                        <p><strong>User:</strong> ${JSON.stringify(result.data.user, null, 2)}</p>
+                        <p><strong>Token:</strong> ${result.data.token.substring(0, 50)}...</p>
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `
+                        <h3>Error!</h3>
+                        <p><strong>Status:</strong> ${response.status}</p>
+                        <p><strong>Message:</strong> ${result.message || 'Unknown error'}</p>
+                        <p><strong>Response:</strong> ${JSON.stringify(result, null, 2)}</p>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <h3>Network Error!</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p>Make sure the backend server is running on http://localhost:5000</p>
+                `;
+            }
+        }
+
+        // Auto-fill some test data
+        document.getElementById('name').value = 'Test User';
+        document.getElementById('email').value = 'test@example.com';
+        document.getElementById('password').value = 'password123';
+        document.getElementById('department').value = 'Computer Science';
+        document.getElementById('studentId').value = 'STU2024001';
+    </script>
+</body>
+</html>

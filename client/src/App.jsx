@@ -12,6 +12,8 @@ import FacultyPanel from './pages/FacultyPanel';
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const { isAuthenticated, user, isLoading } = useAuth();
 
+  console.log('ProtectedRoute - isAuthenticated:', isAuthenticated, 'user:', user, 'isLoading:', isLoading);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -21,10 +23,12 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   }
 
   if (!isAuthenticated) {
+    console.log('ProtectedRoute - User not authenticated, redirecting to login');
     return <Navigate to="/login" replace />;
   }
 
   if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
+    console.log('ProtectedRoute - User role not allowed, redirecting to dashboard');
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -35,6 +39,8 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 const PublicRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
 
+  console.log('PublicRoute - isAuthenticated:', isAuthenticated, 'isLoading:', isLoading);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -44,6 +50,7 @@ const PublicRoute = ({ children }) => {
   }
 
   if (isAuthenticated) {
+    console.log('PublicRoute - User is authenticated, redirecting to dashboard');
     return <Navigate to="/dashboard" replace />;
   }
 

@@ -14,6 +14,7 @@ const initialState = {
 const authReducer = (state, action) => {
   switch (action.type) {
     case 'LOGIN_SUCCESS':
+      console.log('Auth reducer: LOGIN_SUCCESS', action.payload);
       return {
         ...state,
         user: action.payload.user,
@@ -85,8 +86,12 @@ export const AuthProvider = ({ children }) => {
           payload: { user, token },
         });
         
+        console.log('Login successful, user:', user);
         toast.success('Login successful!');
         return { success: true };
+      } else {
+        toast.error('Login failed');
+        return { success: false, error: 'Login failed' };
       }
     } catch (error) {
       const message = error.response?.data?.message || 'Login failed';
@@ -113,8 +118,12 @@ export const AuthProvider = ({ children }) => {
           payload: { user, token },
         });
         
+        console.log('Registration successful, user:', user);
         toast.success('Registration successful!');
         return { success: true };
+      } else {
+        toast.error('Registration failed');
+        return { success: false, error: 'Registration failed' };
       }
     } catch (error) {
       const message = error.response?.data?.message || 'Registration failed';

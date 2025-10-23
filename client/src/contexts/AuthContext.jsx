@@ -1,50 +1,67 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import api from '../services/api';
 
-export const AuthContext = createContext();
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-};
+const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token"));
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Still true by default
 
   useEffect(() => {
-    try {
-      if (token) {
-        const savedUser = JSON.parse(localStorage.getItem("user"));
-        setUser(savedUser);
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decodedUser = jwtDecode(token);
+        if (decodedUser.exp * 1000 > Date.now()) {
+          setUser(decodedUser);
+        } else {
+          localStorage.removeItem('token');
+        }
+      } catch (error) {
+        console.error("Invalid token:", error);
+        localStorage.removeItem('token');
       }
-    } catch (error) {
-      console.error("Error loading auth state:", error);
-      localStorage.clear();
-    } finally {
-      setLoading(false);
     }
-  }, [token]);
+    setLoading(false);
+  }, []);
 
-  const login = (userData, jwtToken) => {
-    localStorage.setItem("token", jwtToken);
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
-    setToken(jwtToken);
+  const login = async (email, password) => {
+    try {
+      const response = await api.post('/auth/login', { email, password });
+      const { token } = response.data;
+      localStorage.setItem('token', token);
+      const decodedUser = jwtDecode(token);
+      setUser(decodedUser);
+    } catch (error) {
+      console.error("Login failed:", error);
+      throw error;
+    }
   };
 
   const logout = () => {
-    localStorage.clear();
+    localStorage.removeItem('token');
     setUser(null);
-    setToken(null);
+  };
+
+  const value = {
+    user,
+    login,
+    logout,
+    isAuthenticated: !!user,
+    loading, // We pass loading to our components
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
+    <AuthContext.Provider value={value}>
+      {/* THE FIX: We now render children immediately.
+        We removed the {!loading && children} wrapper.
+      */}
       {children}
     </AuthContext.Provider>
   );
+};
+
+export const useAuth = () => {
+  return useContext(AuthContext);
 };

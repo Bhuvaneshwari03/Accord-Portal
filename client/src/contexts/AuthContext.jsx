@@ -6,7 +6,7 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Still true by default
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -49,14 +49,11 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     isAuthenticated: !!user,
-    loading, // We pass loading to our components
+    loading, 
   };
 
   return (
     <AuthContext.Provider value={value}>
-      {/* THE FIX: We now render children immediately.
-        We removed the {!loading && children} wrapper.
-      */}
       {children}
     </AuthContext.Provider>
   );

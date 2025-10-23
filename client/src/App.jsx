@@ -7,6 +7,12 @@ import AuthForms from './components/AuthForms';
 import Dashboard from './pages/Dashboard';
 import StudentPanel from './pages/StudentPanel';
 import FacultyPanel from './pages/FacultyPanel';
+import ProtectedRoute from "./components/ProtectedRoute";
+
+<Routes>
+  <Route path="/student" element={<ProtectedRoute roles={["student"]}><StudentPanel/></ProtectedRoute>} />
+  <Route path="/faculty" element={<ProtectedRoute roles={["faculty","admin"]}><FacultyPanel/></ProtectedRoute>} />
+</Routes>
 
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {

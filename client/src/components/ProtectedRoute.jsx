@@ -1,29 +1,20 @@
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import React from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import { Navigate, Outlet } from 'react-router-dom';
 
-export default function ProtectedRoute({ children, roles }) {
-  const { user, loading } = useAuth();
-  const location = useLocation();
+const ProtectedRoute = ({ roles }) => {
+  const { user, isAuthenticated } = useAuth();
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+  if (!isAuthenticated) {
+    // Redirect to login page
+    return <Navigate to="/login" replace />;
   }
 
   if (roles && !roles.includes(user.role)) {
-    // Redirect to appropriate dashboard based on user's role
-    const redirectPath = user.role === 'student' ? '/student' : 
-                        user.role === 'faculty' ? '/faculty' : 
-                        user.role === 'admin' ? '/faculty' : '/';
-    return <Navigate to={redirectPath} replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
-  return children;
-}
+  return <Outlet />;
+};
+
+export default ProtectedRoute;

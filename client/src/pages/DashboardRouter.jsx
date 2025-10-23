@@ -1,37 +1,68 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import ProtectedRoute from '../components/ProtectedRoute'; // For role-specific routes
 
-const DashboardRouter = () => {
+// Import your panels
+import StudentPanel from './StudentPanel';
+import FacultyPanel from './FacultyPanel';
+// import AdminPanel from './AdminPanel'; // If you have one
+import Navbar from '../components/Navbar'; // Your navigation bar
+
+const DashboardLayout = ({ children }) => (
+  <div className="min-h-screen">
+    <Navbar /> {/* Your persistent navbar */}
+    <main className="p-4">
+      {children}
+    </main>
+  </div>
+);
+
+function DashboardRouter() {
   const { user } = useAuth();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    // Redirect based on user role
-    if (user) {
-      switch (user.role) {
-        case 'student':
-          navigate('/student');
-          break;
-        case 'faculty':
-        case 'admin':
-          navigate('/faculty');
-          break;
-        default:
-          navigate('/login');
-      }
-    }
-  }, [user, navigate]);
-
-  // Show loading state while redirecting
+  // This is the main router for *inside* the dashboard
+  // It uses the `DashboardLayout` to show the Navbar on every page.
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <p className="text-gray-600">Redirecting to your dashboard...</p>
-      </div>
-    </div>
+    <DashboardLayout>
+      <Routes>
+        {/*
+          Route for Students
+          - Uses ProtectedRoute to ensure ONLY 'student' role can access it.
+        */}
+        <Route element={<ProtectedRoute roles={['student']} />}>
+          <Route path="student" element={<StudentPanel />} />
+        </Route>
+
+        {/* Route for Faculty
+          - Uses ProtectedRoute to ensure ONLY 'faculty' role can access it.
+        */}
+        <Route element={<ProtectedRoute roles={['faculty', 'admin']} />}>
+          <Route path="faculty" element={<FacultyPanel />} />
+        </Route>
+        
+        {/*
+        <Route element={<ProtectedRoute roles={['admin']} />}>
+          <Route path="admin" element={<AdminPanel />} />
+        </Route>
+        */}
+
+        {/* Default Dashboard Route
+          This route redirects the user to their specific panel
+          based on their role as soon as they hit "/dashboard"
+        */}
+        <Route
+          index // This matches the base "/dashboard"
+          element={
+            user.role === 'student' ? <Navigate to="student" replace /> :
+            user.role === 'faculty' ? <Navigate to="faculty" replace /> :
+            // user.role === 'admin' ? <Navigate to="admin" replace /> :
+            <Navigate to="/login" replace /> // Fallback
+          }
+        />
+      </Routes>
+    </DashboardLayout>
   );
-};
+}
 
 export default DashboardRouter;

@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/*body {
-  /* Set the default background for all pages 
-  @apply bg-gray-100 text-gray-900 antialiased;
-} */
+/* Optional: add custom fonts or styles here */
+html {
+  font-family: 'Inter', system-ui, sans-serif;
+}

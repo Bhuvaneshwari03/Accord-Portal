@@ -1,231 +1,138 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../services/api'; // Your axios instance
+import api from '../services/api';
 
 function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('student'); // Default role
+  const [role, setRole] = useState('student');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setIsLoading(true);
-    
     try {
       await api.post('/auth/register', { name, email, password, role });
       navigate('/login');
     } catch (err) {
       setError('Failed to register. User may already exist.');
       console.error(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-md">
-        {/* Logo/Brand Section */}
-        <div className="text-center mb-8 animate-fadeInDown">
-          <div className="inline-block p-3 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl mb-4">
-            <div className="w-8 h-8 bg-white rounded-lg"></div>
+    <div 
+      className="flex items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat relative"
+      style={{
+        backgroundImage: 'url(https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1600&q=80)',
+      }}
+    >
+      {/* Overlay for better readability */}
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/40 via-purple-900/40 to-pink-900/40 backdrop-blur-sm"></div>
+      
+      <div className="relative z-10 p-10 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl w-full max-w-md">
+        {/* Logo/Icon Area */}
+        <div className="flex justify-center mb-6">
+          <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Welcome to Portal</h1>
-          <p className="text-gray-500 mt-2 text-sm">Create your account to get started</p>
         </div>
 
-        {/* Main Card */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-fadeInUp">
-          <div className="p-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Name Input */}
-              <div className="space-y-2">
-                <label className="text-xs font-medium text-gray-700 uppercase tracking-wider">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-0 py-2 bg-transparent border-0 border-b-2 border-gray-200 focus:border-gray-900 focus:outline-none transition-colors duration-300 text-gray-900 placeholder-gray-400"
-                  placeholder="John Doe"
-                  required
-                />
-              </div>
+        <h2 className="text-4xl font-bold text-center mb-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          Create Account
+        </h2>
+        <p className="text-center text-gray-600 mb-8 text-lg">Join our student portal today</p>
 
-              {/* Email Input */}
-              <div className="space-y-2">
-                <label className="text-xs font-medium text-gray-700 uppercase tracking-wider">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-0 py-2 bg-transparent border-0 border-b-2 border-gray-200 focus:border-gray-900 focus:outline-none transition-colors duration-300 text-gray-900 placeholder-gray-400"
-                  placeholder="john@example.com"
-                  required
-                />
-              </div>
-
-              {/* Password Input */}
-              <div className="space-y-2">
-                <label className="text-xs font-medium text-gray-700 uppercase tracking-wider">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-0 py-2 bg-transparent border-0 border-b-2 border-gray-200 focus:border-gray-900 focus:outline-none transition-colors duration-300 text-gray-900 placeholder-gray-400"
-                  placeholder="••••••••"
-                  required
-                />
-                <p className="text-xs text-gray-500 mt-1">Must be at least 8 characters</p>
-              </div>
-
-              {/* Role Selection - Tab Style */}
-              <div className="space-y-2">
-                <label className="text-xs font-medium text-gray-700 uppercase tracking-wider">
-                  I am a
-                </label>
-                <div className="flex p-1 bg-gray-100 rounded-lg">
-                  <button
-                    type="button"
-                    onClick={() => setRole('student')}
-                    className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-300 ${
-                      role === 'student'
-                        ? 'bg-white text-gray-900 shadow-sm'
-                        : 'text-gray-500 hover:text-gray-700'
-                    }`}
-                  >
-                    Student
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setRole('faculty')}
-                    className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-300 ${
-                      role === 'faculty'
-                        ? 'bg-white text-gray-900 shadow-sm'
-                        : 'text-gray-500 hover:text-gray-700'
-                    }`}
-                  >
-                    Faculty
-                  </button>
-                </div>
-              </div>
-
-              {/* Error Message */}
-              {error && (
-                <div className="p-3 bg-red-50 border-l-4 border-red-500 animate-slideInLeft">
-                  <p className="text-sm text-red-700">{error}</p>
-                </div>
-              )}
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isLoading}
-                className={`w-full py-3 px-4 bg-gray-900 text-white rounded-lg font-medium transition-all duration-300 ${
-                  isLoading 
-                    ? 'opacity-70 cursor-not-allowed' 
-                    : 'hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0'
-                }`}
-              >
-                {isLoading ? (
-                  <span className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Creating account...
-                  </span>
-                ) : (
-                  'Create Account'
-                )}
-              </button>
-            </form>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-6">
+            <label className="block text-gray-700 mb-3 text-lg font-semibold" htmlFor="name">
+              Full Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-5 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:outline-none transition-all duration-300 bg-gray-50"
+              placeholder="Enter your full name"
+              required
+            />
           </div>
 
-          {/* Footer Section */}
-          <div className="px-8 py-4 bg-gray-50 border-t border-gray-100">
-            <p className="text-center text-sm text-gray-600">
-              Already have an account?{' '}
-              <Link 
-                to="/login" 
-                className="font-medium text-gray-900 hover:text-gray-700 transition-colors duration-200"
-              >
-                Sign in
-              </Link>
-            </p>
+          <div className="mb-6">
+            <label className="block text-gray-700 mb-3 text-lg font-semibold" htmlFor="email">
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-5 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:outline-none transition-all duration-300 bg-gray-50"
+              placeholder="you@example.com"
+              required
+            />
           </div>
+
+          <div className="mb-6">
+            <label className="block text-gray-700 mb-3 text-lg font-semibold" htmlFor="password">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-5 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:outline-none transition-all duration-300 bg-gray-50"
+              placeholder="Create a strong password"
+              required
+            />
+          </div>
+
+          <div className="mb-8">
+            <label className="block text-gray-700 mb-3 text-lg font-semibold">
+              I am a
+            </label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full px-5 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:outline-none transition-all duration-300 bg-gray-50 cursor-pointer"
+            >
+              <option value="student">Student</option>
+              <option value="faculty">Faculty</option>
+            </select>
+          </div>
+
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-2xl">
+              <p className="text-red-600 text-base font-medium">{error}</p>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 rounded-2xl text-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+          >
+            Create Account
+          </button>
+        </form>
+
+        <div className="mt-8 text-center">
+          <p className="text-gray-600 text-lg">
+            Already have an account?{' '}
+            <Link
+              to="/login"
+              className="text-indigo-600 font-semibold hover:text-purple-600 transition-colors duration-300"
+            >
+              Sign In
+            </Link>
+          </p>
         </div>
       </div>
-      {/* Custom Animations */}
-      <style jsx>{`
-        @keyframes fadeInDown {
-          from {
-            opacity: 0;
-            transform: translateY(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        .animate-fadeInDown {
-          animation: fadeInDown 0.6s ease-out;
-        }
-
-        .animate-fadeInUp {
-          animation: fadeInUp 0.6s ease-out;
-        }
-
-        .animate-fadeIn {
-          animation: fadeIn 0.8s ease-out 0.3s both;
-        }
-
-        .animate-slideInLeft {
-          animation: slideInLeft 0.3s ease-out;
-        }
-      `}</style>
     </div>
   );
 }

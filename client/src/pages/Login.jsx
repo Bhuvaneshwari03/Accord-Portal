@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate, Navigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useNavigate, Navigate, Link } from 'react-router-dom';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -9,15 +8,20 @@ function Login() {
   const [error, setError] = useState('');
   const auth = useAuth();
   const navigate = useNavigate();
-  
+
+  // Show a loading screen while auth is being checked
   if (auth.loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        Loading...
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-xl font-semibold text-gray-700">Loading...</p>
+        </div>
       </div>
     );
   }
 
+  // If already logged in, go to dashboard
   if (auth.isAuthenticated) {
     return <Navigate to="/dashboard" replace />;
   }
@@ -27,50 +31,70 @@ function Login() {
     setError('');
     try {
       await auth.login(email, password);
-      navigate('/dashboard');
+      navigate('/dashboard'); // redirect after successful login
     } catch (err) {
-      setError('Failed to log in. Please check your credentials.');
+      setError('Invalid email or password');
       console.error(err);
     }
   };
 
-  
   return (
-    // Main container uses the light gray 'bg-gray-100' from index.css
-    <div className="flex items-center justify-center min-h-screen p-4">
-      
-      {/* Card: White background, rounded-xl (extra rounded), soft shadow */}
-      <div className="bg-white p-8 sm:p-10 rounded-xl shadow-lg w-full max-w-md">
-        
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Portal Login
-        </h2>
-        
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label 
-              htmlFor="email" 
-              className="block text-sm font-medium text-gray-700 mb-1"
+    <div
+      className="flex items-center justify-center min-h-screen p-4 bg-cover bg-center bg-no-repeat relative"
+      style={{
+        backgroundImage:
+          'url(https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1600&q=80)',
+      }}
+    >
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/50 via-indigo-900/50 to-purple-900/50 backdrop-blur-sm"></div>
+
+      <div className="relative z-10 bg-white/95 backdrop-blur-md p-10 sm:p-12 rounded-3xl shadow-2xl w-full max-w-lg">
+        {/* Logo */}
+        <div className="flex justify-center mb-6">
+          <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-xl transform hover:scale-105 transition-transform duration-300">
+            <svg
+              className="w-12 h-12 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              Email 
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2.5}
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <h2 className="text-5xl font-bold text-center mb-3 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          Welcome Back
+        </h2>
+        <p className="text-center text-gray-600 mb-10 text-xl">
+          Sign in to your student portal
+        </p>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-lg font-semibold text-gray-700 mb-3">
+              Email Address
             </label>
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-5 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 focus:outline-none transition-all duration-300 bg-gray-50"
               placeholder="you@example.com"
               required
               autoComplete="email"
             />
           </div>
-          
+
           <div>
-            <label 
-              htmlFor="password" 
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="password" className="block text-lg font-semibold text-gray-700 mb-3">
               Password
             </label>
             <input
@@ -78,16 +102,16 @@ function Login() {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-              placeholder="••••••••"
+              className="w-full px-5 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 focus:outline-none transition-all duration-300 bg-gray-50"
+              placeholder="Enter your password"
               required
               autoComplete="current-password"
             />
           </div>
-          
+
           {error && (
-            <div 
-              className="bg-red-50 border border-red-300 text-red-700 px-4 py-2 rounded-lg text-sm text-center"
+            <div
+              className="bg-red-50 border-2 border-red-200 text-red-700 px-5 py-4 rounded-2xl text-base font-medium text-center"
               role="alert"
             >
               {error}
@@ -96,21 +120,20 @@ function Login() {
 
           <button
             type="submit"
-            className="w-full flex justify-center py-2.5 px-4 rounded-lg shadow-sm text-sm font-semibold text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+            className="w-full py-4 px-6 rounded-2xl text-xl font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
           >
-            Login
+            Sign In
           </button>
         </form>
-        
-        <p className="mt-6 text-center text-sm text-gray-600">
-          Don't have an account?{' '}
-          <Link 
-            to="/register" 
-            className="font-medium text-blue-600 hover:text-blue-500"
-          >
-            Register Here
-          </Link>
-        </p>
+
+        <div className="mt-8 text-center">
+          <p className="text-lg text-gray-600">
+            Don't have an account?{' '}
+            <Link to="/register" className="font-bold text-indigo-600 hover:text-blue-600 transition-colors duration-300">
+              Create Account
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

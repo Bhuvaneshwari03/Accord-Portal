@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import { Eye, EyeOff } from 'lucide-react'; // <-- 1. Import icons
 
 function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // <-- 2. Add state
   const [role, setRole] = useState('student');
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -45,10 +47,10 @@ function Register() {
         <h2 className="text-4xl font-bold text-center mb-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
           Create Account
         </h2>
-        <p className="text-center text-gray-600 mb-8 text-lg">Join our student portal today</p>
+        <p className="text-center text-gray-600 mb-8 text-lg">Student portal leave</p>
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-6">
+        <form onSubmit={handleSubmit} className="space-y-6"> {/* Added space-y-6 */}
+          <div className="mb-0"> {/* Removed mb-6, letting space-y handle it */}
             <label className="block text-gray-700 mb-3 text-lg font-semibold" htmlFor="name">
               Full Name
             </label>
@@ -63,7 +65,7 @@ function Register() {
             />
           </div>
 
-          <div className="mb-6">
+          <div className="mb-0">
             <label className="block text-gray-700 mb-3 text-lg font-semibold" htmlFor="email">
               Email Address
             </label>
@@ -78,22 +80,35 @@ function Register() {
             />
           </div>
 
-          <div className="mb-6">
+          <div className="mb-0">
             <label className="block text-gray-700 mb-3 text-lg font-semibold" htmlFor="password">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-5 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:outline-none transition-all duration-300 bg-gray-50"
-              placeholder="Create a strong password"
-              required
-            />
+            {/* 3. Add relative positioning wrapper */}
+            <div className="relative">
+              <input
+                // 4. Change type based on state
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                // 5. Add padding-right (pr-14) to make space for icon
+                className="w-full px-5 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:outline-none transition-all duration-300 bg-gray-50 pr-14"
+                placeholder="Create a strong password"
+                required
+              />
+              {/* 6. Add the icon button */}
+              <button
+                type="button" // Important: prevents form submission
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 flex items-center pr-5 text-gray-500 hover:text-gray-800"
+              >
+                {showPassword ? <Eye size={24} /> : <EyeOff size={24} />}
+              </button>
+            </div>
           </div>
 
-          <div className="mb-8">
+          <div className="mb-0">
             <label className="block text-gray-700 mb-3 text-lg font-semibold">
               I am a
             </label>
@@ -108,7 +123,7 @@ function Register() {
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-2xl">
+            <div className="p-4 bg-red-50 border-2 border-red-200 rounded-2xl">
               <p className="text-red-600 text-base font-medium">{error}</p>
             </div>
           )}

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Navigate, Link } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react'; // <-- 1. Import icons
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // <-- 2. Add state
   const [error, setError] = useState('');
   const auth = useAuth();
   const navigate = useNavigate();
@@ -97,16 +99,29 @@ function Login() {
             <label htmlFor="password" className="block text-lg font-semibold text-gray-700 mb-3">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-5 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 focus:outline-none transition-all duration-300 bg-gray-50"
-              placeholder="Enter your password"
-              required
-              autoComplete="current-password"
-            />
+            {/* 3. Add relative positioning wrapper */}
+            <div className="relative">
+              <input
+                // 4. Change type based on state
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                // 5. Add padding-right (pr-14) to make space for icon
+                className="w-full px-5 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 focus:outline-none transition-all duration-300 bg-gray-50 pr-14"
+                placeholder="Enter your password"
+                required
+                autoComplete="current-password"
+              />
+              {/* 6. Add the icon button */}
+              <button
+                type="button" // Important: prevents form submission
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 flex items-center pr-5 text-gray-500 hover:text-gray-800"
+              >
+                {showPassword ? <Eye size={24} /> : <EyeOff size={24} />}
+              </button>
+            </div>
           </div>
 
           {error && (

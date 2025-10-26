@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Navigate, Link } from 'react-router-dom';
-import { Eye, EyeOff } from 'lucide-react'; // <-- 1. Import icons
+import { Eye, EyeOff } from 'lucide-react';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // <-- 2. Add state
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const auth = useAuth();
   const navigate = useNavigate();
@@ -14,10 +14,15 @@ function Login() {
   // Show a loading screen while auth is being checked
   if (auth.loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#FFDBBB] via-[#CCBEB1] to-[#997E67]">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-xl font-semibold text-gray-700">Loading...</p>
+          <div className="w-16 h-16 border-4 border-[#664930] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p 
+            className="text-xl font-semibold text-[#664930]"
+            style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
+          >
+            Loading...
+          </p>
         </div>
       </div>
     );
@@ -33,7 +38,7 @@ function Login() {
     setError('');
     try {
       await auth.login(email, password);
-      navigate('/dashboard'); // redirect after successful login
+      navigate('/dashboard');
     } catch (err) {
       setError('Invalid email or password');
       console.error(err);
@@ -41,22 +46,13 @@ function Login() {
   };
 
   return (
-    <div
-      className="flex items-center justify-center min-h-screen p-4 bg-cover bg-center bg-no-repeat relative"
-      style={{
-        backgroundImage:
-          'url(https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1600&q=80)',
-      }}
-    >
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/50 via-indigo-900/50 to-purple-900/50 backdrop-blur-sm"></div>
-
-      <div className="relative z-10 bg-white/95 backdrop-blur-md p-10 sm:p-12 rounded-3xl shadow-2xl w-full max-w-lg">
+    <div className="flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-[#FFDBBB] via-[#CCBEB1] to-[#997E67]">
+      <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="flex justify-center mb-6">
-          <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-xl transform hover:scale-105 transition-transform duration-300">
+        <div className="flex justify-center mb-8">
+          <div className="w-20 h-20 bg-gradient-to-br from-[#664930] to-[#997E67] rounded-2xl flex items-center justify-center shadow-lg">
             <svg
-              className="w-12 h-12 text-white"
+              className="w-10 h-10 text-[#FFDBBB]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -71,16 +67,26 @@ function Login() {
           </div>
         </div>
 
-        <h2 className="text-5xl font-bold text-center mb-3 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+        <h2 
+          className="text-5xl font-bold text-center mb-3 text-[#664930] drop-shadow-sm"
+          style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
+        >
           Welcome Back
         </h2>
-        <p className="text-center text-gray-600 mb-10 text-xl">
-          Sign in to your student portal
+        <p 
+          className="text-center text-[#664930]/70 mb-8 text-xl"
+          style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
+        >
+          Sign in to your Accord Portal
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="email" className="block text-lg font-semibold text-gray-700 mb-3">
+            <label 
+              htmlFor="email" 
+              className="block font-semibold text-[#664930] mb-2"
+              style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
+            >
               Email Address
             </label>
             <input
@@ -88,7 +94,8 @@ function Login() {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-5 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 focus:outline-none transition-all duration-300 bg-gray-50"
+              className="w-full px-4 py-3 border border-[#664930]/20 rounded-lg focus:border-[#664930] focus:ring-1 focus:ring-[#664930] focus:outline-none transition-all duration-200 bg-white/60 backdrop-blur-sm text-[#664930] hover:bg-white/80"
+              style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
               placeholder="you@example.com"
               required
               autoComplete="email"
@@ -96,37 +103,39 @@ function Login() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-lg font-semibold text-gray-700 mb-3">
+            <label 
+              htmlFor="password" 
+              className="block font-semibold text-[#664930] mb-2"
+              style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
+            >
               Password
             </label>
-            {/* 3. Add relative positioning wrapper */}
             <div className="relative">
               <input
-                // 4. Change type based on state
                 type={showPassword ? 'text' : 'password'}
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                // 5. Add padding-right (pr-14) to make space for icon
-                className="w-full px-5 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 focus:outline-none transition-all duration-300 bg-gray-50 pr-14"
+                className="w-full px-4 py-3 border border-[#664930]/20 rounded-lg focus:border-[#664930] focus:ring-1 focus:ring-[#664930] focus:outline-none transition-all duration-200 bg-white/60 backdrop-blur-sm pr-12 text-[#664930] hover:bg-white/80"
+                style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
                 placeholder="Enter your password"
                 required
                 autoComplete="current-password"
               />
-              {/* 6. Add the icon button */}
               <button
-                type="button" // Important: prevents form submission
+                type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 flex items-center pr-5 text-gray-500 hover:text-gray-800"
+                className="absolute inset-y-0 right-0 flex items-center pr-4 text-[#997E67] hover:text-[#664930] transition-colors"
               >
-                {showPassword ? <Eye size={24} /> : <EyeOff size={24} />}
+                {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
               </button>
             </div>
           </div>
 
           {error && (
             <div
-              className="bg-red-50 border-2 border-red-200 text-red-700 px-5 py-4 rounded-2xl text-base font-medium text-center"
+              className="bg-red-500/20 border border-red-600/30 text-red-900 px-4 py-3 rounded-lg text-sm font-medium text-center"
+              style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
               role="alert"
             >
               {error}
@@ -135,16 +144,24 @@ function Login() {
 
           <button
             type="submit"
-            className="w-full py-4 px-6 rounded-2xl text-xl font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            className="w-full py-3 px-6 rounded-lg font-semibold text-[#FFDBBB] bg-[#664930] hover:bg-[#997E67] focus:outline-none focus:ring-2 focus:ring-[#664930] shadow-lg hover:shadow-xl transition-all duration-300"
+            style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
           >
             Sign In
           </button>
         </form>
 
-        <div className="mt-8 text-center">
-          <p className="text-lg text-gray-600">
+        <div className="mt-6 text-center">
+          <p 
+            className="text-[#664930]/70"
+            style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
+          >
             Don't have an account?{' '}
-            <Link to="/register" className="font-bold text-indigo-600 hover:text-blue-600 transition-colors duration-300">
+            <Link 
+              to="/register" 
+              className="font-bold text-[#664930] hover:text-[#997E67] transition-colors duration-300"
+              style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
+            >
               Create Account
             </Link>
           </p>

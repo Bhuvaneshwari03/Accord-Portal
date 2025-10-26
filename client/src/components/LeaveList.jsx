@@ -57,7 +57,7 @@ function LeaveList() {
     <div className="flex justify-center items-center py-12">
       <div className="animate-pulse">
         <p 
-          className="text-[#997E67] text-xl"
+          className="text-[#664930] text-xl"
           style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
         >
           Loading requests...
@@ -67,9 +67,9 @@ function LeaveList() {
   );
   
   if (error) return (
-    <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-lg">
+    <div className="bg-red-500/20 border-l-4 border-red-600 p-4 rounded-lg">
       <p 
-        className="text-red-700"
+        className="text-red-900 font-medium"
         style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
       >
         {error}
@@ -87,9 +87,9 @@ function LeaveList() {
       </h3>
       <div className="space-y-4">
         {requests.length === 0 ? (
-          <div className="text-center py-12 bg-gradient-to-br from-[#FFDBBB]/20 to-[#CCBEB1]/20 rounded-xl border-2 border-dashed border-[#CCBEB1]">
+          <div className="text-center py-12 border-2 border-dashed border-[#664930]/30 rounded-lg">
             <p 
-              className="text-[#997E67] text-lg"
+              className="text-[#664930]/60 text-lg"
               style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
             >
               No requests found.
@@ -99,34 +99,34 @@ function LeaveList() {
           requests.map((req) => (
             <div 
               key={req._id} 
-              className="bg-gradient-to-br from-white to-[#FFDBBB]/10 border border-[#CCBEB1]/40 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.01]"
+              className="bg-white/60 backdrop-blur-sm border border-[#664930]/20 p-5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 hover:bg-white/80"
             >
-              <div className="flex justify-between items-start">
+              <div className="flex justify-between items-start gap-4">
                 <div className="flex-1">
                   <p 
-                    className="font-bold text-xl text-[#664930] mb-2"
+                    className="font-bold text-lg text-[#664930] mb-2"
                     style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
                   >
                     {user.role === 'faculty' ? `Student: ${req.studentName}` : `Type: ${req.leaveType}`}
                   </p>
                   <p 
-                    className="text-[#997E67] mb-2"
+                    className="text-[#664930]/80 mb-2"
                     style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
                   >
                     <span className="font-semibold">Reason:</span> {req.reason}
                   </p>
                   <p 
-                    className="text-sm text-[#997E67]/80"
+                    className="text-sm text-[#664930]/60"
                     style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
                   >
                     <span className="font-semibold">Dates:</span> {new Date(req.startDate).toLocaleDateString()} to {new Date(req.endDate).toLocaleDateString()}
                   </p>
                 </div>
-                <div className="flex flex-col items-end ml-4">
-                  <span className={`px-4 py-2 rounded-full text-sm font-semibold shadow-sm ${
-                    req.status === 'pending' ? 'bg-[#FFDBBB] text-[#664930] border border-[#CCBEB1]' :
-                    req.status === 'approved' ? 'bg-green-100 text-green-800 border border-green-300' :
-                    'bg-red-100 text-red-800 border border-red-300'
+                <div className="flex flex-col items-end">
+                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                    req.status === 'pending' ? 'bg-[#FFDBBB] text-[#664930] border border-[#664930]/20' :
+                    req.status === 'approved' ? 'bg-green-500/30 text-green-900 border border-green-600/30' :
+                    'bg-red-500/30 text-red-900 border border-red-600/30'
                   }`}
                   style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
                   >
@@ -135,17 +135,17 @@ function LeaveList() {
                   
                   {/* Show buttons only to faculty and if status is pending */}
                   {user.role === 'faculty' && req.status === 'pending' && (
-                    <div className="mt-4 space-x-2 flex">
+                    <div className="mt-3 flex gap-2">
                       <button 
                         onClick={() => handleApprove(req._id)}
-                        className="bg-gradient-to-br from-green-500 to-green-600 text-white px-5 py-2 rounded-lg hover:from-green-600 hover:to-green-700 shadow-md hover:shadow-lg transition-all duration-200 font-medium"
+                        className="bg-green-600 text-white px-4 py-1.5 rounded-lg hover:bg-green-700 shadow-sm hover:shadow transition-all duration-200 text-sm font-medium"
                         style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
                       >
                         Approve
                       </button>
                       <button 
                         onClick={() => handleReject(req._id)}
-                        className="bg-gradient-to-br from-red-500 to-red-600 text-white px-5 py-2 rounded-lg hover:from-red-600 hover:to-red-700 shadow-md hover:shadow-lg transition-all duration-200 font-medium"
+                        className="bg-red-600 text-white px-4 py-1.5 rounded-lg hover:bg-red-700 shadow-sm hover:shadow transition-all duration-200 text-sm font-medium"
                         style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
                       >
                         Reject

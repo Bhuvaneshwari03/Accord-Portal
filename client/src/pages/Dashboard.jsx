@@ -92,13 +92,13 @@ const Dashboard = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'approved':
-        return 'text-green-600 bg-green-100';
+        return 'text-[#664930] bg-[#CCBEB1]';
       case 'rejected':
-        return 'text-red-600 bg-red-100';
+        return 'text-[#664930] bg-[#997E67]';
       case 'pending':
-        return 'text-yellow-600 bg-yellow-100';
+        return 'text-[#664930] bg-[#FFDBBB]';
       default:
-        return 'text-gray-600 bg-gray-100';
+        return 'text-[#664930] bg-[#CCBEB1]';
     }
   };
 
@@ -132,38 +132,38 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="flex items-center justify-center min-h-screen bg-[#FBF7F4]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#997E67]"></div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 bg-[#FBF7F4] min-h-screen p-8" style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}>
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-8 text-white">
+      <div className="bg-gradient-to-br from-[#997E67] to-[#664930] rounded-2xl p-10 text-[#FBF7F4] shadow-lg">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold mb-2">
+            <h1 className="text-4xl font-bold mb-3 tracking-wide" style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}>
               {getGreeting()}, {user?.name}!
             </h1>
-            <p className="text-blue-100 text-lg">
+            <p className="text-[#FFDBBB] text-lg tracking-wide">
               Welcome to your {user?.role === 'student' ? 'Student' : 'Faculty'} Dashboard
             </p>
-            <div className="mt-4 flex items-center space-x-4 text-sm">
-              <span className="bg-white bg-opacity-20 px-3 py-1 rounded-full">
+            <div className="mt-5 flex items-center space-x-4 text-sm">
+              <span className="bg-[#664930] bg-opacity-40 px-4 py-2 rounded-full tracking-wide">
                 {user?.department}
               </span>
               {user?.studentId && (
-                <span className="bg-white bg-opacity-20 px-3 py-1 rounded-full">
+                <span className="bg-[#664930] bg-opacity-40 px-4 py-2 rounded-full tracking-wide">
                   ID: {user?.studentId}
                 </span>
               )}
             </div>
           </div>
           <div className="hidden md:block">
-            <div className="w-24 h-24 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-              <span className="text-3xl font-bold">
+            <div className="w-28 h-28 bg-[#664930] bg-opacity-30 rounded-full flex items-center justify-center border-4 border-[#FFDBBB]">
+              <span className="text-4xl font-bold tracking-wider">
                 {user?.name?.charAt(0).toUpperCase()}
               </span>
             </div>
@@ -173,50 +173,50 @@ const Dashboard = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="bg-white rounded-2xl shadow-md border border-[#CCBEB1] p-7 hover:shadow-xl transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Total Requests</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
+              <p className="text-sm font-medium text-[#997E67] tracking-wide uppercase">Total Requests</p>
+              <p className="text-4xl font-bold text-[#664930] mt-2">{stats.total}</p>
             </div>
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <FileText className="w-6 h-6 text-blue-600" />
+            <div className="w-14 h-14 bg-[#FFDBBB] rounded-xl flex items-center justify-center">
+              <FileText className="w-7 h-7 text-[#664930]" />
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="bg-white rounded-2xl shadow-md border border-[#CCBEB1] p-7 hover:shadow-xl transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Pending</p>
-              <p className="text-3xl font-bold text-yellow-600">{stats.pending}</p>
+              <p className="text-sm font-medium text-[#997E67] tracking-wide uppercase">Pending</p>
+              <p className="text-4xl font-bold text-[#664930] mt-2">{stats.pending}</p>
             </div>
-            <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-              <Clock className="w-6 h-6 text-yellow-600" />
+            <div className="w-14 h-14 bg-[#FFDBBB] rounded-xl flex items-center justify-center">
+              <Clock className="w-7 h-7 text-[#664930]" />
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="bg-white rounded-2xl shadow-md border border-[#CCBEB1] p-7 hover:shadow-xl transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Approved</p>
-              <p className="text-3xl font-bold text-green-600">{stats.approved}</p>
+              <p className="text-sm font-medium text-[#997E67] tracking-wide uppercase">Approved</p>
+              <p className="text-4xl font-bold text-[#664930] mt-2">{stats.approved}</p>
             </div>
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <CheckCircle className="w-6 h-6 text-green-600" />
+            <div className="w-14 h-14 bg-[#CCBEB1] rounded-xl flex items-center justify-center">
+              <CheckCircle className="w-7 h-7 text-[#664930]" />
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="bg-white rounded-2xl shadow-md border border-[#CCBEB1] p-7 hover:shadow-xl transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Rejected</p>
-              <p className="text-3xl font-bold text-red-600">{stats.rejected}</p>
+              <p className="text-sm font-medium text-[#997E67] tracking-wide uppercase">Rejected</p>
+              <p className="text-4xl font-bold text-[#664930] mt-2">{stats.rejected}</p>
             </div>
-            <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-              <XCircle className="w-6 h-6 text-red-600" />
+            <div className="w-14 h-14 bg-[#997E67] rounded-xl flex items-center justify-center">
+              <XCircle className="w-7 h-7 text-white" />
             </div>
           </div>
         </div>
@@ -224,26 +224,26 @@ const Dashboard = () => {
 
       {/* Quick Actions */}
       {user?.role === 'student' && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <FileText className="w-5 h-5 text-blue-600" />
+        <div className="bg-white rounded-2xl shadow-md border border-[#CCBEB1] p-8">
+          <h2 className="text-2xl font-bold text-[#664930] mb-6 tracking-wide">Quick Actions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <button className="flex items-center space-x-4 p-5 border-2 border-[#CCBEB1] rounded-xl hover:bg-[#FBF7F4] hover:border-[#997E67] transition-all duration-300">
+              <div className="w-12 h-12 bg-[#FFDBBB] rounded-xl flex items-center justify-center">
+                <FileText className="w-6 h-6 text-[#664930]" />
               </div>
               <div className="text-left">
-                <p className="font-medium text-gray-900">Apply for Leave</p>
-                <p className="text-sm text-gray-600">Submit a new leave request</p>
+                <p className="font-semibold text-[#664930] tracking-wide">Apply for Leave</p>
+                <p className="text-sm text-[#997E67] tracking-wide">Submit a new leave request</p>
               </div>
             </button>
             
-            <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-green-600" />
+            <button className="flex items-center space-x-4 p-5 border-2 border-[#CCBEB1] rounded-xl hover:bg-[#FBF7F4] hover:border-[#997E67] transition-all duration-300">
+              <div className="w-12 h-12 bg-[#CCBEB1] rounded-xl flex items-center justify-center">
+                <Calendar className="w-6 h-6 text-[#664930]" />
               </div>
               <div className="text-left">
-                <p className="font-medium text-gray-900">View My Requests</p>
-                <p className="text-sm text-gray-600">Check status of your requests</p>
+                <p className="font-semibold text-[#664930] tracking-wide">View My Requests</p>
+                <p className="text-sm text-[#997E67] tracking-wide">Check status of your requests</p>
               </div>
             </button>
           </div>
@@ -251,19 +251,19 @@ const Dashboard = () => {
       )}
 
       {/* Recent Requests */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-900">Recent Requests</h2>
-          <button className="text-blue-600 hover:text-blue-700 font-medium">
+      <div className="bg-white rounded-2xl shadow-md border border-[#CCBEB1] p-8">
+        <div className="flex items-center justify-between mb-7">
+          <h2 className="text-2xl font-bold text-[#664930] tracking-wide">Recent Requests</h2>
+          <button className="text-[#997E67] hover:text-[#664930] font-semibold tracking-wide transition-colors">
             View All
           </button>
         </div>
 
         {recentRequests.length === 0 ? (
-          <div className="text-center py-8">
-            <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No requests found</h3>
-            <p className="text-gray-600">
+          <div className="text-center py-12">
+            <AlertCircle className="w-16 h-16 text-[#CCBEB1] mx-auto mb-5" />
+            <h3 className="text-xl font-semibold text-[#664930] mb-2 tracking-wide">No requests found</h3>
+            <p className="text-[#997E67] tracking-wide">
               {user?.role === 'student' 
                 ? 'You haven\'t submitted any leave requests yet' 
                 : 'No leave requests to display'
@@ -273,29 +273,29 @@ const Dashboard = () => {
         ) : (
           <div className="space-y-4">
             {recentRequests.map((request) => (
-              <div key={request._id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="flex items-center space-x-4">
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getStatusColor(request.status)}`}>
+              <div key={request._id} className="flex items-center justify-between p-5 border-2 border-[#CCBEB1] rounded-xl hover:bg-[#FBF7F4] hover:border-[#997E67] transition-all duration-300">
+                <div className="flex items-center space-x-5">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${getStatusColor(request.status)}`}>
                     {getStatusIcon(request.status)}
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">
+                    <h3 className="font-semibold text-[#664930] tracking-wide">
                       {user?.role === 'student' ? 'Leave Request' : request.student?.name}
                     </h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-[#997E67] tracking-wide">
                       {request.type === 'leave' ? 'Leave' : 'On-Duty'} • {formatDate(request.fromDate)} - {formatDate(request.toDate)}
                     </p>
                     {user?.role !== 'student' && (
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-[#CCBEB1] tracking-wide">
                         {request.student?.studentId} • {request.student?.department}
                       </p>
                     )}
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(request.status)}`}>
+                  <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium tracking-wide ${getStatusColor(request.status)}`}>
                     {getStatusIcon(request.status)}
-                    <span className="ml-1 capitalize">{request.status}</span>
+                    <span className="ml-1.5 capitalize">{request.status}</span>
                   </span>
                 </div>
               </div>
@@ -308,59 +308,59 @@ const Dashboard = () => {
       {['faculty', 'admin'].includes(user?.role) && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Approval Rate */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Approval Rate</h3>
-            <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                <TrendingUp className="w-8 h-8 text-green-600" />
+          <div className="bg-white rounded-2xl shadow-md border border-[#CCBEB1] p-8">
+            <h3 className="text-xl font-bold text-[#664930] mb-6 tracking-wide">Approval Rate</h3>
+            <div className="flex items-center space-x-5">
+              <div className="w-20 h-20 bg-[#CCBEB1] rounded-full flex items-center justify-center">
+                <TrendingUp className="w-10 h-10 text-[#664930]" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-3xl font-bold text-[#664930]">
                   {stats.total > 0 ? Math.round((stats.approved / stats.total) * 100) : 0}%
                 </p>
-                <p className="text-sm text-gray-600">Approval Rate</p>
+                <p className="text-sm text-[#997E67] tracking-wide">Approval Rate</p>
               </div>
             </div>
           </div>
 
           {/* Request Distribution */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Request Distribution</h3>
-            <div className="space-y-3">
+          <div className="bg-white rounded-2xl shadow-md border border-[#CCBEB1] p-8">
+            <h3 className="text-xl font-bold text-[#664930] mb-6 tracking-wide">Request Distribution</h3>
+            <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Pending</span>
-                <div className="flex items-center space-x-2">
-                  <div className="w-20 bg-gray-200 rounded-full h-2">
+                <span className="text-sm text-[#997E67] tracking-wide">Pending</span>
+                <div className="flex items-center space-x-3">
+                  <div className="w-24 bg-[#CCBEB1] rounded-full h-2.5">
                     <div 
-                      className="bg-yellow-500 h-2 rounded-full" 
+                      className="bg-[#FFDBBB] h-2.5 rounded-full transition-all duration-500" 
                       style={{ width: `${stats.total > 0 ? (stats.pending / stats.total) * 100 : 0}%` }}
                     ></div>
                   </div>
-                  <span className="text-sm font-medium text-gray-900">{stats.pending}</span>
+                  <span className="text-sm font-semibold text-[#664930] w-8">{stats.pending}</span>
                 </div>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Approved</span>
-                <div className="flex items-center space-x-2">
-                  <div className="w-20 bg-gray-200 rounded-full h-2">
+                <span className="text-sm text-[#997E67] tracking-wide">Approved</span>
+                <div className="flex items-center space-x-3">
+                  <div className="w-24 bg-[#CCBEB1] rounded-full h-2.5">
                     <div 
-                      className="bg-green-500 h-2 rounded-full" 
+                      className="bg-[#997E67] h-2.5 rounded-full transition-all duration-500" 
                       style={{ width: `${stats.total > 0 ? (stats.approved / stats.total) * 100 : 0}%` }}
                     ></div>
                   </div>
-                  <span className="text-sm font-medium text-gray-900">{stats.approved}</span>
+                  <span className="text-sm font-semibold text-[#664930] w-8">{stats.approved}</span>
                 </div>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Rejected</span>
-                <div className="flex items-center space-x-2">
-                  <div className="w-20 bg-gray-200 rounded-full h-2">
+                <span className="text-sm text-[#997E67] tracking-wide">Rejected</span>
+                <div className="flex items-center space-x-3">
+                  <div className="w-24 bg-[#CCBEB1] rounded-full h-2.5">
                     <div 
-                      className="bg-red-500 h-2 rounded-full" 
+                      className="bg-[#664930] h-2.5 rounded-full transition-all duration-500" 
                       style={{ width: `${stats.total > 0 ? (stats.rejected / stats.total) * 100 : 0}%` }}
                     ></div>
                   </div>
-                  <span className="text-sm font-medium text-gray-900">{stats.rejected}</span>
+                  <span className="text-sm font-semibold text-[#664930] w-8">{stats.rejected}</span>
                 </div>
               </div>
             </div>

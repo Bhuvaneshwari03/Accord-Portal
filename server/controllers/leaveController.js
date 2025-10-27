@@ -7,6 +7,15 @@ const applyLeave = async (req, res) => {
   const { leaveType, reason, startDate, endDate } = req.body;
 
   try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); 
+    const requestStartDate = new Date(startDate);
+    if (requestStartDate < today) {
+      return res.status(400).json({ 
+        message: 'Cannot apply for leave in the past.' 
+      });
+    }
+
     const leave = new LeaveRequest({
       student: req.user.id, // From 'protect' middleware
       leaveType,

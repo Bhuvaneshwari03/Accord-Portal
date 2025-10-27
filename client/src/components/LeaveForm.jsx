@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
-import api from '../services/api'; // We'll use this to send data
+import api from '../services/api'; 
 
 function LeaveForm() {
-  const [leaveType, setLeaveType] = useState('leave'); // leave or on-duty
+  const [leaveType, setLeaveType] = useState('leave'); 
   const [reason, setReason] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [message, setMessage] = useState(''); // For success/error messages
-
+  const [message, setMessage] = useState(''); 
+  const today = new Date().toISOString().split('T')[0];
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
     
     try {
-      // This is where you'll call your backend API
-      // We haven't built the server endpoint yet, so this will fail for now.
-      // But the frontend logic is ready.
       const response = await api.post('/leave/apply', {
         leaveType,
         reason,
@@ -24,7 +21,6 @@ function LeaveForm() {
       });
 
       setMessage('Leave request submitted successfully!');
-      // Clear the form
       setReason('');
       setStartDate('');
       setEndDate('');
@@ -53,6 +49,7 @@ function LeaveForm() {
           <select
             value={leaveType}
             onChange={(e) => setLeaveType(e.target.value)}
+            min={today}
             className="w-full px-4 py-3 border border-[#664930]/20 rounded-lg bg-white/80 backdrop-blur-sm focus:bg-white focus:border-[#664930] focus:ring-1 focus:ring-[#664930] outline-none transition-all duration-200 text-[#664930]"
             style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
           >
@@ -73,6 +70,7 @@ function LeaveForm() {
             id="reason"
             value={reason}
             onChange={(e) => setReason(e.target.value)}
+            min={startDate || today}
             className="w-full px-4 py-3 border border-[#664930]/20 rounded-lg bg-white/80 backdrop-blur-sm focus:bg-white focus:border-[#664930] focus:ring-1 focus:ring-[#664930] outline-none transition-all duration-200 text-[#664930] resize-none"
             style={{ fontFamily: "'Crimson Text', 'Georgia', serif" }}
             rows="3"
